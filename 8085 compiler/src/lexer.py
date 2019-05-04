@@ -1,17 +1,26 @@
 def lex(filecontents):
 	filecontents=list(filecontents)
 	tokens=[]
+	#Implementations left#
+	#Stack keywords
+	#Rotate
+	#16 bit operations
+	#JUMP operations
+	keywords=["STA","MVI","MOV","LDA","ADD","ADC","ADI","ACI","SUB","SBB","SBI","INR","DCR","CMP",
+				"CPI","ANA","ANI","XRA","XRI","ORA","ORI"]
+	next_state={"STA":1,"MVI":2,"MOV":2,"LDA":1,"ADD":2,"ADC":2,"ADI":3,"ACI":3,"SUB":2,"SBB":2,
+				"SBI":3,"INR":2,"DCR":2,"CMP":2,"CPI":3,"ANA":2,"ANI":3,"XRA":2,"XRI":3,"ORA":2,"ORI":3}
 	### Token codes used : ###
-	# ADR: Address String
-	# REG: Register
-	# VL8 : 8-bit Data
+	# ADR: String
+	# VL8: 8-bit Data
+	# REG: Register 
 	tok=""
 	string=""
 	state=0
 	d8=""
 	### State descriptions ###
-	# state = 0: Keywords
-	# state = 1: String Address datatype
+	# state = 0; Keywords and variables
+	# state = 1; String Address datatype
 	# state = 2: String register name
 	# state = 3: String 8-bit data
 	# state = 4: String 16-bit data
@@ -35,21 +44,12 @@ def lex(filecontents):
 				tok=""
 			if(state==1):
 				string+=c
-
-		elif (tok=="STA"):
-			tokens.append("STA")
+		elif(tok in keywords):
+			tokens.append(tok)
+			state=next_state[tok]
 			tok=""
-			state=1
-		elif(tok=="MVI"):
-			tokens.append("MVI")
-			tok=""
-			state=2
-		elif(tok=="MOV"):
-			tokens.append("MOV")
-			tok=""
-			state=2
 		elif(tok=="HLT"):
-			#print (tokens)
+			print (tokens)
 			return tokens;
 		elif (state==1):
 			string+=c
