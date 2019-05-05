@@ -1,3 +1,4 @@
+
 def lex(filecontents):
 	filecontents=list(filecontents)
 	tokens=[]
@@ -8,7 +9,7 @@ def lex(filecontents):
 	#JUMP operations
 	keywords=["STA","MVI","MOV","LDA","ADD","ADC","ADI","ACI","SUB","SBB","SBI","INR","DCR","CMP",
 				"CPI","ANA","ANI","XRA","XRI","ORA","ORI"]
-	next_state={"STA":1,"MVI":2,"MOV":2,"LDA":1,"ADD":2,"ADC":2,"ADI":3,"ACI":3,"SUB":2,"SBB":2,
+	next_state={"STA":1,"MVI":5,"MOV":2,"LDA":1,"ADD":2,"ADC":2,"ADI":3,"ACI":3,"SUB":2,"SBB":2,
 				"SBI":3,"INR":2,"DCR":2,"CMP":2,"CPI":3,"ANA":2,"ANI":3,"XRA":2,"XRI":3,"ORA":2,"ORI":3}
 	### Token codes used : ###
 	# ADR: String
@@ -24,9 +25,10 @@ def lex(filecontents):
 	# state = 2: String register name
 	# state = 3: String 8-bit data
 	# state = 4: String 16-bit data
+	# state = 5: Exceptional state
 	for c in filecontents:
 		tok=tok+c
-		if(tok==" "):
+		if(tok in (" ",",")):
 			tok=""
 		elif (tok=="\n"):
 			if(state==1):
@@ -49,7 +51,6 @@ def lex(filecontents):
 			state=next_state[tok]
 			tok=""
 		elif(tok=="HLT"):
-			print (tokens)
 			return tokens;
 		elif (state==1):
 			string+=c
@@ -60,6 +61,10 @@ def lex(filecontents):
 		elif(state==3):
 			d8+=tok
 			tok=""
+		elif(state==5):
+			tokens.append("REG:"+tok)
+			tok=""
+			state=3
 	return tokens
 
 
