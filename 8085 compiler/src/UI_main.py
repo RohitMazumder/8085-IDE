@@ -3,6 +3,7 @@ import os
 from tkinter import *
 from tkinter.messagebox import *
 from tkinter.filedialog import *
+from main import run
 
 class IDE8085: 
   
@@ -52,9 +53,12 @@ class IDE8085:
             self.__root.columnconfigure(c+2, weight=1)
             Button(self.__root, text="Button {0}".format(c+2)).grid(row=6,column=c+2,sticky=E+W)
     def __click(self): 
-            file = open('temp2.txt',"w") 
+            file = open('temp.txt',"w") 
             file.write(self.__thisTextArea.get(1.0,END)) 
             file.close()
+            main.run()
+ #   def __click2(self):
+ #           main.run()
     def run(self): # Run main application 
         self.__root.mainloop() 
   
