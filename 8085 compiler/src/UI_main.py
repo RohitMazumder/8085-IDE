@@ -1,19 +1,25 @@
-import tkinter 
+import tkinter as tk
 import os     
 from tkinter import *
 from tkinter.messagebox import *
 from tkinter.filedialog import *
 from main import run
-import subprocess
 
 class IDE8085: 
   
     __root = Tk() 
     __root.grid()
-    __root.title("Untitled - 8085") 
+    __root.title("8085_IDE")
+    Image0 = tk.PhotoImage(file="tb_.gif") 
     frame=Frame(__root)
+    Frame0 = Frame(__root, bg="grey")
+    Frame0.grid(row = 0, column = 0, rowspan = 1, columnspan = 14, sticky = W+E+N+S)
+    canvas0 = Canvas(Frame0, bd=0, highlightthickness=0)
+    canvas0.pack(side=TOP, fill=X)
+    #canvas0.configure(width = Frame0.winfo_width(), height = Frame0.winfo_height())
+    w1 = tk.Label(canvas0, image=Image0).pack(side=LEFT, fill=BOTH, expand=TRUE)
     Frame1 = Frame(__root, bg='#505050')
-    Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 4, sticky = W+E+N+S)
+    Frame1.grid(row = 1, column = 0, rowspan = 10, columnspan = 10, sticky = W+E+N+S)
     vscrollbar = Scrollbar(Frame1, orient=VERTICAL)
     vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
     xscrollbar = Scrollbar(Frame1, orient=HORIZONTAL)
@@ -29,14 +35,14 @@ class IDE8085:
     __thisTextArea.grid(sticky = N + E + S + W) 
     __thisTextArea.configure(background='#505050', fg="white")
 
-    Frame2 = Frame(__root, bg="blue")
-    Frame2.grid(row = 4, column = 0, rowspan = 3, columnspan = 4, sticky = W+E+N+S)
+    Frame2 = Frame(__root)
+    Frame2.grid(row = 11, column = 0, rowspan = 9, columnspan = 10, sticky = W+E+N+S)
     vscrollbar = Scrollbar(Frame2, orient=VERTICAL)
     vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
     canvas2 = Canvas(Frame2, bd=0, highlightthickness=0, bg="#505050",
                     yscrollcommand=vscrollbar.set)
     canvas2.pack(side=LEFT, fill=BOTH, expand=TRUE)
-    canvas.grid_columnconfigure(0, weight=1)
+    canvas2.grid_columnconfigure(0, weight=1)
     __thisTextArea2 = Text(canvas2)
     __thisTextArea2.pack(expand=True, fill='both')
     __thisTextArea2.configure(background='#505050', fg="white")
@@ -45,52 +51,52 @@ class IDE8085:
     vscrollbar.config(command=canvas.yview)
     
     Frame3 = Frame(__root, bg="black")
-    Frame3.grid(row = 0, column = 4, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
+    Frame3.grid(row = 1, column = 10, rowspan = 19, columnspan = 4, sticky = W+E+N+S)
     __file = None
+    
+    Image = tk.PhotoImage(file="cmp.gif") 
+    Image2 = tk.PhotoImage(file="run.gif") 
     def __init__(self, **kwargs):
         
         self.widgets()
-        for r in range(6):
-            self.__root.rowconfigure(r, weight=1) 
-        self.__root.columnconfigure(0, weight=1)
-        photo=tk.PhotoImage(file="img.gif")
-        Button(self.__root, image=photo, text="compile".format(0), compound="top", command=self.__click).grid(row=6,column=0,sticky=E+W)
-        self.__root.columnconfigure(1, weight=1)
-        Button(self.__root, text="run".format(1), command=self.__run).grid(row=6,column=1,sticky=E+W)
-        for c in range(4):
-            self.__root.columnconfigure(c+2, weight=1)
-            Button(self.__root, text="Button {0}".format(c+2)).grid(row=6,column=c+2,sticky=E+W)
+        for r in range(20):
+            self.__root.rowconfigure(r, weight=1)
+        for r in range(20):
+            self.__root.columnconfigure(r, weight=1)
+        Button(self.__root, image=self.Image,compound="top", command=self.__click).grid(row=0,column=0,sticky=N+W) 
+        Button(self.__root, image=self.Image2,compound="top", command=self.__run).grid(row=0,column=0,sticky=N) 
     def __click(self):
-            path="temp.txt"
-            file = open(path,"w+") 
-            file.write(self.__thisTextArea.get(1.0,END)) 
-            file.close()
-            run(path)
-            os.remove(path)
+        path="temp.txt"
+        file = open(path,"w+") 
+        file.write(self.__thisTextArea.get(1.0,END)) 
+        file.close()
+        run(path)
+        os.remove(path)
     def __run(self):
-        command = ['ls', '-l']
-        p = subprocess.Popen(command)
-        text = p.stdout.read()
-        retcode = p.wait()
+        path="check.txt"
+        self.__thisTextArea2.delete(1.0,END) 
+        file = open(path,"r") 
+        self.__thisTextArea2.insert(1.0,file.read()) 
+        file.close() 
     def widgets(self):
 
 
         menubar = Menu(self.__root)
         filemenu=Menu(menubar)
         menubar.add_cascade(label="File", menu=filemenu)
-        filemenu.add_command(label = "New", command = "")
+        filemenu.add_command(label = "New                Ctrl+N", command = "")
         filemenu.add_command(label = "Open", command = "" )
         filemenu.add_separator()
-        filemenu.add_command(label = "Save", command =self.__save)
+        filemenu.add_command(label = "Save               Ctrl+S", command =self.__save)
         filemenu.add_command(label = "Duplicate", command = "" )
         filemenu.add_command(label = "Rename", command = "")
         editmenu=Menu(menubar)
         menubar.add_cascade(label="Edit", menu=editmenu)
         
-        editmenu.add_command(label="Cut", command=self.__cut )              
-        editmenu.add_command(label="Copy", command=self.__copy )          
-        editmenu.add_command(label="Paste", command=self.__paste)   
-        menubar.add_cascade(label="Quit")
+        editmenu.add_command(label="Cut              Ctrl+X", command=self.__cut )              
+        editmenu.add_command(label="Copy           Ctrl+C" , command=self.__copy )          
+        editmenu.add_command(label="Paste            Ctrl+V", command=self.__paste)   
+        menubar.add_cascade(label="Help")
 
         self.__root.config(menu=menubar)
     def __save(self):
@@ -111,7 +117,7 @@ class IDE8085:
                 file.close() 
                   
                 # Change the window title 
-                self.__root.title(os.path.basename(self.__file) + " - 8085IDE") 
+                self.__root.title(os.path.basename(self.__file) + " - 8085_IDE") 
                   
               
     def __cut(self):
