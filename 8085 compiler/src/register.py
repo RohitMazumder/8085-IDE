@@ -46,6 +46,7 @@ class Register:
                 return self
 
 def set_ac(a,b):
+        #print(id(a))
         x=a.value&15
         y=b.value&15
         if (x+y>15):
@@ -94,4 +95,51 @@ def ADD(B):
         A=A+B
         set_flag(A)
 
-A,B,C,D,E,H,L,M=Register(),Register(),Register(),Register(),Register(),Register(),Register(),Register()
+def ADC(B):
+    global A,W
+    W.set(flag["CY"])
+    A=A+B+W
+    set_flag(A)
+
+def JNZ():
+        if (flag["Z"]==0):
+                return 'true'
+        else :
+                return 'false'
+
+def JZ():
+        if (flag["Z"]==0):
+                return 'false'
+        else :
+                return 'true'
+
+def JNC():
+        if (flag["CY"]==0):
+                return 'true'
+        else :
+                return 'false'
+
+def JC():
+        if (flag["Z"]==0):
+                return 'false'
+        else :
+                return 'true'
+
+def DCR(B):
+        global W
+        W.set(1)
+        temp=flag["CY"]
+        B=B-W
+        flag["CY"]=temp
+        set_flag(B)
+
+def INR(B):
+        global W
+        W.set(1)
+        B=B+W
+        set_flag(B)
+
+
+
+
+A,B,C,D,E,H,L,M,W,Z=Register(),Register(),Register(),Register(),Register(),Register(),Register(),Register(),Register(),Register()

@@ -1,4 +1,4 @@
-
+labels={}
 def lex(filecontents):
 	filecontents=list(filecontents)
 	tokens=[]
@@ -8,9 +8,9 @@ def lex(filecontents):
 	#16 bit operations
 	#JUMP operations
 	keywords=["STA","MVI","MOV","LDA","ADD","ADC","ADI","ACI","SUB","SBB","SBI","INR","DCR","CMP",
-				"CPI","ANA","ANI","XRA","XRI","ORA","ORI"]
+				"CPI","ANA","ANI","XRA","XRI","ORA","ORI","JMP","JNZ","JZ","JC","JNC"]
 	next_state={"STA":1,"MVI":5,"MOV":2,"LDA":1,"ADD":2,"ADC":2,"ADI":3,"ACI":3,"SUB":2,"SBB":2,
-				"SBI":3,"INR":2,"DCR":2,"CMP":2,"CPI":3,"ANA":2,"ANI":3,"XRA":2,"XRI":3,"ORA":2,"ORI":3}
+				"SBI":3,"INR":2,"DCR":2,"CMP":2,"CPI":3,"ANA":2,"ANI":3,"XRA":2,"XRI":3,"ORA":2,"ORI":3,"JMP":6,"JNZ":6,"JZ":6,"JC":6,"JNC":6}
 	### Token codes used : ###
 	# ADR: String
 	# VL8: 8-bit Data
@@ -19,6 +19,7 @@ def lex(filecontents):
 	string=""
 	state=0
 	d8=""
+	lab=""
 	### State descriptions ###
 	# state = 0; Keywords and variables
 	# state = 1; String Address datatype
@@ -26,10 +27,17 @@ def lex(filecontents):
 	# state = 3: String 8-bit data
 	# state = 4: String 16-bit data
 	# state = 5: Exceptional state
+	# state = 6: Label 
 	for c in filecontents:
 		tok=tok+c
 		if(tok in (" ",",")):
 			tok=""
+		elif(c==":"):
+			tok=tok[:-1]
+			tokens.append("LAB:"+tok)
+			labels[tok]=len(tokens)
+			tok=""
+			state=0
 		elif (tok=="\n"):
 			if(state==1):
 				tokens.append("ADR:"+string)
@@ -37,9 +45,12 @@ def lex(filecontents):
 			elif(state==3):
 				tokens.append("VL8:"+d8)
 				d8=""
+			elif(state==6):
+				tokens.append("LAB:"+lab)
+				lab=""
 			tok=""
 			state=0
-		elif(tok.isdigit()):
+		elif(tok.isdigit() and state in (1,2)):
 			if(state==2):
 				state=3
 				d8+=c
@@ -51,7 +62,8 @@ def lex(filecontents):
 			state=next_state[tok]
 			tok=""
 		elif(tok=="HLT"):
-			return tokens;
+			#print(tokens)
+			return tokens
 		elif (state==1):
 			string+=c
 			tok=""
@@ -65,6 +77,9 @@ def lex(filecontents):
 			tokens.append("REG:"+tok)
 			tok=""
 			state=3
+		elif(state==6):
+			lab+=c
+			tok=""
 	return tokens
 
 

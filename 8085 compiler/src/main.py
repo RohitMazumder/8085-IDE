@@ -1,8 +1,8 @@
 from sys import *
-from lexer import lex
+from lexer import lex,labels
 from parse import parse 
+import register
 
-reg={"A":0,"B":0,"C":0,"D":0,"E":0,"H":0,"L":0}
 def open_file(filename):
 	data=open(filename,"r").read()
 	return data
@@ -11,5 +11,7 @@ def run():
 	data=open_file(argv[1])
 	toks=lex(data)
 	print("\n####### Console #######\n ")
-	parse(toks,reg)
+	parse(toks,labels)
+	print(register.flag)
+
 run()
