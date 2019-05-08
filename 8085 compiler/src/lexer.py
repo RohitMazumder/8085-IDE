@@ -7,9 +7,9 @@ def lex(filecontents):
 	#Rotate
 	#16 bit operations
 	#JUMP operations
-	keywords=["STA","MVI","MOV","LDA","ADD","ADC","ADI","ACI","SUB","SBB","SBI","INR","DCR","CMP",
+	keywords=["STA","MVI","MOV","LDA","ADD","ADC","ADI","ACI","SUB","SUI","SBB","SBI","INR","DCR","CMP",
 				"CPI","ANA","ANI","XRA","XRI","ORA","ORI","JMP","JNZ","JZ","JC","JNC"]
-	next_state={"STA":1,"MVI":5,"MOV":2,"LDA":1,"ADD":2,"ADC":2,"ADI":3,"ACI":3,"SUB":2,"SBB":2,
+	next_state={"STA":1,"MVI":5,"MOV":2,"LDA":1,"ADD":2,"ADC":2,"ADI":3,"ACI":3,"SUB":2,"SUI":3,"SBB":2,
 				"SBI":3,"INR":2,"DCR":2,"CMP":2,"CPI":3,"ANA":2,"ANI":3,"XRA":2,"XRI":3,"ORA":2,"ORI":3,"JMP":6,"JNZ":6,"JZ":6,"JC":6,"JNC":6}
 	### Token codes used : ###
 	# ADR: String
