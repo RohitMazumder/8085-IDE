@@ -1,7 +1,7 @@
 import register
 
 def parse(toks,labels):
-	size={"STA":2,"MVI":3,"MOV":3,"LDA":2,"ADD":2,"ADC":2,"ADI":2,"ACI":2,"SUB":2,"SBB":2,
+	size={"STA":2,"MVI":3,"MOV":3,"LDA":2,"ADD":2,"ADC":2,"ADI":2,"ACI":2,"SUB":2,"SBB":2,"SUI":2,
 				"SBI":2,"INR":2,"DCR":2,"CMP":2,"CPI":3,"ANA":2,"ANI":3,"XRA":2,"XRI":3,"ORA":2,"ORI":3,"JMP":0,"JNZ":2,"JZ":2,"JC":2,"JNC":2}
 	i=0
 	change_flag=1
@@ -29,7 +29,7 @@ def parse(toks,labels):
 				f=getattr(register,toks[i])
 				f(getarg(toks[i+1][4:]),getarg(toks[i+2][4:]))
 
-			elif(toks[i] in ("ADD","ADC","DCR","INR")):
+			elif(toks[i] in ("ADD","ADC","DCR","INR","SUB","SBB")):
 				f=getattr(register,toks[i])
 				f(getarg(toks[i+1][4:]))
 
