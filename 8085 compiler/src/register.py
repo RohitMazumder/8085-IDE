@@ -80,7 +80,8 @@ def set_flag(a):
 def STA(add):
         global A
         if add>=0000 and add<=65535:
-                print(str(hex(add))+" : "+str(hex(A.value)))
+                file=open("out.txt","a")
+                file.write(str(hex(add))+" : "+str(hex(A.value))+"\n")
                 
 def MVI(x,a):
         x.set(a)
@@ -100,6 +101,37 @@ def ADC(B):
     W.set(flag["CY"])
     A=A+B+W
     set_flag(A)
+
+def ACI(data):
+        global A,W,Z
+        W.set(data)
+        Z.set(flag['CY'])
+        A=A+W+Z
+        set_flag(A)
+
+def SUB(b):
+        global A
+        A=A-b
+        set_flag(A)
+
+def SUI(data):
+        global A,W
+        W.set(data)
+        A=A-W
+        set_flag(A)
+
+def SBB(b):
+        global A,W
+        W.set(flag['CY'])
+        A=A-W-b
+        set_flag(A)
+
+def SBI(data):
+        global A,W,Z
+        W.set(data)
+        Z.set(flag['CY'])
+        A=A-W-Z
+        set_flag(A)
 
 def JNZ():
         if (flag["Z"]==0):
