@@ -29,7 +29,7 @@ class IDE8085:
     canvas.configure(xscrollcommand=xscrollbar.set)
     canvas.pack(side=LEFT, fill=BOTH, expand=TRUE)
     canvas.grid_columnconfigure(0, weight=1)
-    __thisTextArea = Text(canvas)
+    __thisTextArea = Text(canvas,font=("calibri",12))
     __thisTextArea.pack(expand=True, fill='both')
     __thisTextArea.configure(background='#505050', fg="white")
     __thisTextArea.grid(sticky = N + E + S + W) 
@@ -43,7 +43,7 @@ class IDE8085:
                     yscrollcommand=vscrollbar.set)
     canvas2.pack(side=LEFT, fill=BOTH, expand=TRUE)
     canvas2.grid_columnconfigure(0, weight=1)
-    __thisTextArea2 = Text(canvas2)
+    __thisTextArea2 = Text(canvas2,font=("times new roman",12))
     __thisTextArea2.pack(expand=True, fill='both')
     __thisTextArea2.configure(background='#505050', fg="white")
     __thisTextArea2.grid(sticky = N + E + S + W) 
@@ -73,11 +73,12 @@ class IDE8085:
         run(path)
         os.remove(path)
     def __run(self):
-        path="check.txt"
+        path="out.txt"
         self.__thisTextArea2.delete(1.0,END) 
         file = open(path,"r") 
         self.__thisTextArea2.insert(1.0,file.read()) 
         file.close() 
+        os.remove("out.txt")
     def widgets(self):
 
 
